@@ -188,7 +188,7 @@ function watchNet(){
  }catch(e){}
 }
 
-// --- clima (Jaraguá do Sul, SC) ---
+// --- clima (configure latitude/longitude da sua cidade) ---
 function wIcon(c){
  var SUN='<circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M5.2 18.8l1.4-1.4M17.4 6.6l1.4-1.4"/>';
  var CLOUD='<path d="M7 18h10a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.6 1.5A3.5 3.5 0 0 0 7 18z"/>';
@@ -280,7 +280,7 @@ function setPos(p){pos=p;applyPos();rnStg();save()}
 function renderBar(){
  var bar=document.getElementById('bar');bar.innerHTML='';
  var wx=document.createElement('div');wx.id='weather';
- wx.innerHTML='<span id="wico"></span><span id="wtemp">--&deg;</span><span id="wsub">Jaraguá do Sul</span>';
+ wx.innerHTML='<span id="wico"></span><span id="wtemp">--&deg;</span><span id="wsub">Sua cidade</span>';
  bar.appendChild(wx);
  var ck=document.createElement('div');ck.id='clock';bar.appendChild(ck);
  BAR.forEach(function(it,i){
