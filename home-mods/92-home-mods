@@ -1,0 +1,20 @@
+#!/bin/sh
+# HBC init.d hook: aplica os mods da Inicio da LG (bind-mount do home.xml, banner, textos).
+# Normalmente roda ANTES da Inicio subir no boot -> ela ja le os arquivos modificados.
+# Se a Inicio ja estava aberta quando montamos (hook atrasado), ela leu o home.xml
+# original: entao matamos o processo pra ela reler (e reabrimos se o SAM nao reabrir).
+(
+    ja_aberta=0
+    pgrep -f 'flutter-client -i com.webos.app.home' >/dev/null && ja_aberta=1
+    sh /media/developer/home-mods/apply-home-mods.sh
+    echo "$(date '+%H:%M:%S') home-mods aplicado (inicio ja aberta: $ja_aberta)" >> /tmp/home-mods.log
+    [ $ja_aberta = 1 ] || exit 0
+    sleep 3
+    pkill -9 -f 'flutter-client -i com.webos.app.home'
+    # se ninguem reabrir a Inicio em 2s, abre (depois do /sbin/reboot o SAM nao reabre sozinho;
+    # luna-send funciona no contexto do HBC)
+    sleep 2
+    pgrep -f 'flutter-client -i com.webos.app.home' >/dev/null || \
+        luna-send -n 1 luna://com.webos.applicationManager/launch '{"id":"com.webos.app.home"}'
+) > /dev/null 2>&1 &
+exit 0
